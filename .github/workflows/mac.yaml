@@ -1,0 +1,26 @@
+name: Build macOS Executable
+
+on:
+  push:
+    branches:
+      - mac
+    paths:
+      - '**/*.cpp'
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Compile C++ Code
+      run: |
+        clang++ -O3 -std=c++17 *.cpp -o program_mac
+
+    - name: Upload macOS Binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-binary
+        path: program_mac
