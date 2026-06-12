@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "All-working build sample program\n";
+    std::cout << "it fucking works!" << std::endl;
     return 0;
 }
