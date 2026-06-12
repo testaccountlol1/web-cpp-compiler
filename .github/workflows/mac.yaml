@@ -6,6 +6,8 @@ on:
       - mac
     paths:
       - '**/*.cpp'
+      - '.github/workflows/mac.yaml'
+  workflow_dispatch: {}
 
 jobs:
   build-mac:
@@ -17,10 +19,14 @@ jobs:
 
     - name: Compile C++ Code
       run: |
-        clang++ -O3 -std=c++17 *.cpp -o program_mac
+        clang++ -O3 -std=c++17 main.cpp -o program_mac
 
-    - name: Upload macOS Binary
+    - name: Package executable
+      run: |
+        tar -czf program-mac.tar.gz program_mac
+
+    - name: Upload macOS artifact
       uses: actions/upload-artifact@v4
       with:
-        name: macos-binary
-        path: program_mac
+        name: macos-program
+        path: program-mac.tar.gz

@@ -6,6 +6,8 @@ on:
       - win
     paths:
       - '**/*.cpp'
+      - '.github/workflows/win.yaml'
+  workflow_dispatch: {}
 
 jobs:
   build-windows:
@@ -20,10 +22,14 @@ jobs:
 
     - name: Compile C++ Code
       run: |
-        cl.exe /EHsc *.cpp /Fe:program.exe
+        cl.exe /EHsc /std:c++17 /O2 main.cpp /Fe:program.exe
 
-    - name: Upload Windows Executable
+    - name: Package executable
+      run: |
+        powershell -Command "Compress-Archive -Path program.exe -DestinationPath program-win.zip"
+
+    - name: Upload Windows artifact
       uses: actions/upload-artifact@v4
       with:
-        name: windows-binary
-        path: program.exe
+        name: windows-program
+        path: program-win.zip

@@ -6,6 +6,8 @@ on:
       - linux
     paths:
       - '**/*.cpp'
+      - '.github/workflows/linux.yaml'
+  workflow_dispatch: {}
 
 jobs:
   build-linux:
@@ -15,17 +17,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install Compiler
+    - name: Install compiler
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential
+        sudo apt-get install -y g++
 
     - name: Compile C++ Code
       run: |
-        g++ -O3 *.cpp -o program
+        g++ -O3 -std=c++17 main.cpp -o program
 
-    - name: Upload Linux Binary
+    - name: Package executable
+      run: |
+        tar -czf program-linux.tar.gz program
+
+    - name: Upload Linux artifact
       uses: actions/upload-artifact@v4
       with:
-        name: linux-binary
-        path: program
+        name: linux-program
+        path: program-linux.tar.gz
